@@ -12,5 +12,5 @@ subnet_prefixes = [
 ]
 
 vm_name        = "devops-vm"
-vm_size        = "Standard_B1s"
+vm_size        = "Standard_D2s_v5"
 admin_username = "azureuser"
