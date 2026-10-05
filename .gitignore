@@ -4,3 +4,4 @@
 *.tfvars
 *.tfvars.json
 *.tfvars.json
+sku-list.json
