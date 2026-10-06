@@ -15,10 +15,18 @@ provider "azurerm" {
   resource_provider_registrations = "none"
 }
 
+locals {
+  vm_sizes = {
+    dev     = "Standard_B2ats_v2"
+    staging = "Standard_B2ats_v2"
+    prod    = "Standard_D2s_v5"
+  }
+}
+
 module "vnet" {
   source = "./modules/vnet"
 
-  name                = var.vnet_name
+  name                = "${terraform.workspace}-web-server"
   location            = var.location
   resource_group_name = var.resource_group_name
   address_space       = var.vnet_address_space
@@ -28,12 +36,14 @@ module "vnet" {
 module "vm" {
   source = "./modules/vm"
 
-  name                = var.vm_name
+  depends_on = [module.vnet]
+
+  name                = "${terraform.workspace}-web-server"
   location            = var.location
   resource_group_name = var.resource_group_name
 
   subnet_id = module.vnet.subnet_ids[0]
 
-  vm_size        = var.vm_size
+  vm_size        = local.vm_sizes[terraform.workspace]
   admin_username = var.admin_username
 }
